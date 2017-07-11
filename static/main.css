@@ -2,11 +2,6 @@ body {
     position: relative;
     font-family: Helvetica, Arial, sans-serif;
     font-size: 14px;
-
-    width: 800px;
-    margin: 0 auto;
-    padding: 10px;
-    color: #333;
 }
 
 .login-area {
@@ -67,7 +62,7 @@ input[type=submit] {
   font-size: 24px;
 }
 
-.main-title {
+/*.main-title {
     display: block;
     color: #222;
     font-size: 40px;
@@ -75,7 +70,7 @@ input[type=submit] {
     text-align: center;
     margin-bottom: 30px;
     text-decoration: none;
-}
+}*/
 
 .post + .post {
     margin-top: 15px;
