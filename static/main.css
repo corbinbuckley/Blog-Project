@@ -3,7 +3,9 @@ body {
     font-family: Helvetica, Arial, sans-serif;
     font-size: 14px;
 }
-
+form {
+    border: 3px solid #f1f1f1;
+}
 .login-area {
     font-size: 13px;
     color: gray;
