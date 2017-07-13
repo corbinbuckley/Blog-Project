@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=.75">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link type="text/css" rel="stylesheet" href="/static/main.css" />
   <link rel="stylesheet" type="text/css" href="/static/bootstrap.css">
   <link rel="stylesheet" type="text/css" href="/static/bootstrap-theme.css">
@@ -10,20 +10,23 @@
 </head>
 
 <body>
-  <a href="/blog" class="main-title">
-    Life of Mathematician
-  </a>
+  <div class="container">
+    <div class="row">
+      <a href="/blog" class="main-title col-xs-10 col-sm-10 col-md-10 col-lg-10">
+        Life of Mathematician
+      </a>
 
-  <div class="login-area">
-    {% if user %}
-      {{user.name}} (<a class="login-link" href="/logout">logout</a>)
-    {% else %}
-      <a class="login-link" href="/login">login</a>
-      |
-      <a class="login-link" href="/signup">signup</a>
-    {% endif %}
+      <div class="login-area col-xs-2 col-sm-2 col-md-2 col-lg-2">
+        {% if user %}
+          {{user.name}} (<a class="login-link" href="/logout">logout</a>)
+        {% else %}
+          <a class="login-link" href="/login">login</a>
+          |
+          <a class="login-link" href="/signup">signup</a>
+        {% endif %}
+      </div>
+    </div>
   </div>
-
   <div id="content">
   {% block content %}
   {% endblock %}
