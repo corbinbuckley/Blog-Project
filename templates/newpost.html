@@ -1,21 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Newpost</title>
+  <link rel="stylesheet" type="text/css" href="/static/form.css">
+</head>
+<body>
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>new post</h2>
-
+  <h2>New Post</h2>
     <form method="post">
-      <label>
-        <div>subject</div>
-        <input type="text" name="subject" value="{{subject}}">
-      </label>
+      <div class="container">
+        <label><b>Subject</b>
+          <input type="text" name="subject" value="{{subject}}" placeholder="Enter post subject">
+        </label>
 
-      <label>
-        <div>blog</div>
-        <textarea name="content">{{content}}</textarea>
-      </label>
+        <label>
+          <div><b>Blog Entry<b></div>
+          <textarea name="content">{{content}}</textarea>
+        </label>
 
-      <div class="error">{{error}}</div>
+        <div class="error">{{error}}</div>
 
-      <input type="submit">
+        <button type="submit">Submit</button>
+      </div>
     </form>
 {% endblock %}
+</body>
+</html>
+
+
