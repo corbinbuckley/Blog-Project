@@ -163,6 +163,7 @@ class NewPost(BlogHandler):
         if subject and content:
             p = Post(parent = blog_key(), subject = subject, content = content)
             p.put()
+            #This just shows the one post, maybe could be used to edit or make comments later
             self.redirect('/blog/%s' % str(p.key().id()))
         else:
             error = "subject and content, please!"
@@ -273,7 +274,6 @@ class Welcome(BlogHandler):
             self.redirect('/unit2/signup')
 
 app = webapp2.WSGIApplication([('/', MainPage),
-                               ('/unit2/rot13', Rot13),
                                ('/unit2/signup', Unit2Signup),
                                ('/unit2/welcome', Welcome),
                                ('/blog/?', BlogFront),
