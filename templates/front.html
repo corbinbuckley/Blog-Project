@@ -1,9 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<!-- renders the content from of the posts and does displays the html becuase of 'safe' -->
   {% for p in posts %}
     {{ p.render() | safe }}
+    <h4>Leave comment</h4>
+    <form method="post">
+        <textarea class="commentarea" name="comment">{{comment}}</textarea>
+        <button type="submit">Submit</button>
+    </form>
+
     <br><br>
   {% endfor %}
 
