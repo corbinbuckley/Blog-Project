@@ -8,23 +8,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>New Post</h2>
+  <div class="container">
+    <h2>New Post</h2>
     <form method="post">
-      <div class="container">
-        <label><b>Subject</b>
-          <input type="text" name="subject" value="{{subject}}" placeholder="Enter post subject">
-        </label>
-
-        <label>
-          <div><b>Blog Entry<b></div>
-          <textarea name="content">{{content}}</textarea>
-        </label>
+        <label><b>Subject</b></label>
+        <input class="subject" type="text" name="subject" value="{{subject}}" placeholder="Enter post subject">
+        <label><b>Blog Entry</b></label>
+        <textarea name="content">{{content}}</textarea>
 
         <div class="error">{{error}}</div>
 
         <button type="submit">Submit</button>
-      </div>
     </form>
+  </div>
 {% endblock %}
 </body>
 </html>
