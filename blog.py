@@ -142,8 +142,18 @@ class Comment(db.Model):
 
 class BlogFront(BlogHandler):
     def get(self):
+
         posts = greetings = Post.all().order('-created')
         self.render('front.html', posts = posts)
+
+    def post(self):
+        comments = Comment.all()
+        posts = greetings = Post.all().order('-created')
+        comment = self.request.get('comment')
+
+        c = Comment(parent = blog_key(), comment = comment)
+        c.put()
+        self.render('front.html', posts = posts, comment = comment)
 
 class PostPage(BlogHandler):
     def get(self, post_id):
