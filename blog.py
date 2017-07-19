@@ -130,10 +130,27 @@ class Post(db.Model):
         self._render_text = self.content.replace('\n', '<br>')
         return render_str("post.html", p = self)
 
+class Comment(db.Model):
+    comment = db.TextProperty()
+
+    def render(self):
+        self._render_text = self.comment.replace('\n','<br>')
+        return render_str('front.html', c = self)
+
 class BlogFront(BlogHandler):
     def get(self):
+
         posts = greetings = Post.all().order('-created')
         self.render('front.html', posts = posts)
+
+    def post(self):
+        comments = Comment.all()
+        posts = greetings = Post.all().order('-created')
+        comment = self.request.get('comment')
+
+        c = Comment(parent = blog_key(), comment = comment)
+        c.put()
+        self.render('front.html', posts = posts, comment = comment)
 
 class PostPage(BlogHandler):
     def get(self, post_id):
