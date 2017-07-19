@@ -4,15 +4,7 @@
 <!-- renders the content from of the posts and does displays the html becuase of 'safe' -->
   {% for p in posts %}
     {{ p.render() | safe }}
-    {% for  c in comments %}
-        {{ c.render() | safe }}
-    {% endfor %}
-    <h4>Leave comment</h4>
-    <form method="post">
-        <textarea class="commentarea" name="comment">{{comment}}</textarea>
-        <button type="submit">Submit</button>
-    </form>
-    {{ comment }}
+
     <br><br>
   {% endfor %}
 
