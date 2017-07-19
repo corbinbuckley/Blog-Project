@@ -1,15 +1,20 @@
 <div class="post">
   <div class="post-heading">
     <div class="post-title">
-      {{p.subject}}
+<!--     Grabs the subject from class Post in blog.py for every p(post) in Post  -->
+      <a href="/blog">
+      {{Post.subject}}
+      </a>
     </div>
 
     <div class="post-date">
-      {{p.created.strftime("%b %d, %Y")}}
+<!--  python fucntion prints readable date  -->
+      {{Post.created.strftime("%b %d, %Y")}}
     </div>
   </div>
 
   <div class="post-content">
-    {{p._render_text | safe}}
+    {{Post._render_text | safe}}
   </div>
+
 </div>
