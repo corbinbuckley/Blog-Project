@@ -19,7 +19,7 @@
 
       <div class="login-area col-xs-2 col-sm-2 col-md-2 col-lg-2">
         {% if user %}
-          {{user.name}} (<a class="login-link" href="/logout">logout</a>)
+          {{user.name.title()}} (<a class="login-link" href="/logout">logout</a>)
         {% else %}
           <a class="login-link" href="/login">login</a>
           |
@@ -29,7 +29,7 @@
     </div>
     <div class="row">
       <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9"></div>
-      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+      <div class="new-post-button col-xs-3 col-sm-3 col-md-3 col-lg-3">
       <a href="/blog/newpost">
         <button>New post</button>
 
