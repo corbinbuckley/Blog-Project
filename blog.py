@@ -126,6 +126,7 @@ class Post(db.Model):
     created = db.DateTimeProperty(auto_now_add = True)
     last_modified = db.DateTimeProperty(auto_now = True)
 
+
     def render(self):
         self._render_text = self.content.replace('\n', '<br>')
         return render_str("post.html", Post = self)
@@ -155,7 +156,7 @@ class PostPage(BlogHandler):
             self.error(404)
             return
 
-        self.render("permalink.html", post = post)
+        self.render("permalink.html", post = post, postid = post_id)
 
 class NewPost(BlogHandler):
     def get(self):
@@ -175,7 +176,6 @@ class NewPost(BlogHandler):
         if subject and content:
             p = Post(parent = blog_key(), subject = subject, content = content)
             p.put()
-
 
 
             #This just shows the one post, maybe could be used to edit or make comments later
