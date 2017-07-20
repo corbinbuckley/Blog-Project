@@ -156,7 +156,7 @@ class PostPage(BlogHandler):
             self.error(404)
             return
 
-        self.render("permalink.html", post = post, postid = post_id)
+        self.render("permalink.html", post = post)
 
 class NewPost(BlogHandler):
     def get(self):

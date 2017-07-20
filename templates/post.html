@@ -2,7 +2,7 @@
   <div class="post-heading">
     <div class="post-title">
 <!--     Grabs the subject from class Post in blog.py for every p(post) in Post  -->
-      <a href="/blog">
+      <a href={{ "/blog/" ~ Post.key().id() }}>
       {{Post.subject}}
       </a>
     </div>
