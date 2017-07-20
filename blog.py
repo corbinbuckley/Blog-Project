@@ -132,6 +132,7 @@ class Post(db.Model):
         return render_str("post.html", Post = self)
         # Changed to Post = self instead of p = self
 
+# Not using this class at the moment. Dont know if I will.
 class Comment(db.Model):
     comment = db.TextProperty()
 
