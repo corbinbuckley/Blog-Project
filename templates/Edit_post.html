@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Post</title>
+  <link rel="stylesheet" type="text/css" href="/static/form.css">
+</head>
+<body>
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container">
+    <h2>New Post</h2>
+    <form method="post">
+        <label><b>Subject</b></label>
+        <input class="subject" type="text" name="subject" value="{{subject}}" placeholder="Enter post subject">
+        <label><b>Blog Entry</b></label>
+        <textarea name="content">{{content}}</textarea>
+
+        <div class="error">{{error}}</div>
+
+        <button type="submit">Submit</button>
+    </form>
+  </div>
+{% endblock %}
+</body>
+</html>
