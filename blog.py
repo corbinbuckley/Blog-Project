@@ -196,12 +196,12 @@ class NewPost(BlogHandler):
 class EditPost(BlogHandler):
     def get(self, post_id):
         post = get_post_by_id(post_id)
-        if self.user.key().id():
+        if self.user.key().id() == post.author_id:
             subject = post.subject
             content = post.content
             self.render("Edit_post.html", subject = subject, content = content)
         else:
-            errror = "You can only edit your posts"
+            error = "You can only edit your posts"
             self.render("permalink.html", post = post, error = error)
 
     def post(self, post_id):
@@ -209,7 +209,7 @@ class EditPost(BlogHandler):
 
         if not self.user:
             self.redirect('/blog')
-        if self.user.key().id():
+        if self.user.key().id() == post.author_id:
             new_subject = self.request.get('subject')
             new_content = self.request.get('content')
 
@@ -218,8 +218,12 @@ class EditPost(BlogHandler):
                 post.content = new_content
                 post.put()
                 self.redirect('/blog/%s' % str(post.key().id()))
-
-
+            else:
+                error = "Needs subject and content"
+                self.render("newpost.html", subject = new_subject, content = new_content, error = error)
+        else:
+            errror = "You can only edit your posts"
+            self.render("permalink.html", post = post, error = error)
 
 
 
