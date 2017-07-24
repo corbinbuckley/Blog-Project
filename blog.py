@@ -125,6 +125,8 @@ class Post(db.Model):
     content = db.TextProperty(required = True)
     created = db.DateTimeProperty(auto_now_add = True)
     last_modified = db.DateTimeProperty(auto_now = True)
+    author_id = db.IntegerProperty()
+    author_name = db.StringProperty()
 
 
     def render(self):
@@ -172,10 +174,12 @@ class NewPost(BlogHandler):
 
         subject = self.request.get('subject')
         content = self.request.get('content')
+        author_id = self.user.key().id()
+        author_name = self.user.name
 
 
         if subject and content:
-            p = Post(parent = blog_key(), subject = subject, content = content)
+            p = Post(parent = blog_key(), subject = subject, content = content, author_id = author_id, author_name = author_name)
             p.put()
 
 
