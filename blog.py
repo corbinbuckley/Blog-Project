@@ -16,6 +16,10 @@ jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
 
 secret = 'secretword'
 
+def get_post_by_id(post_id):
+    key = db.Key.from_path('Post', int(post_id), parent=blog_key())
+    return db.get(key)
+
 def render_str(template, **params):
     t = jinja_env.get_template(template)
     return t.render(params)
@@ -189,6 +193,35 @@ class NewPost(BlogHandler):
             error = "subject and content, please!"
             self.render("newpost.html", subject=subject, content=content, error=error)
 
+class EditPost(BlogHandler):
+    def get(self, post_id):
+        post = get_post_by_id(post_id)
+        if self.user.key().id():
+            subject = post.subject
+            content = post.content
+            self.render("Edit_post.html", subject = subject, content = content)
+        else:
+            errror = "You can only edit your posts"
+            self.render("permalink.html", post = post, error = error)
+
+    def post(self, post_id):
+        post = get_post_by_id(post_id)
+
+        if not self.user:
+            self.redirect('/blog')
+        if self.user.key().id():
+            new_subject = self.request.get('subject')
+            new_content = self.request.get('content')
+
+            if new_subject and new_content:
+                post.subject = new_subject
+                post.content = new_content
+                post.put()
+                self.redirect('/blog/%s' % str(post.key().id()))
+
+
+
+
 
 USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
 def valid_username(username):
@@ -303,5 +336,6 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/login', Login),
                                ('/logout', Logout),
                                ('/unit3/welcome', Unit3Welcome),
+                               ('/blog/edit_post/([0-9]+)', EditPost)
                                ],
                               debug=True)
