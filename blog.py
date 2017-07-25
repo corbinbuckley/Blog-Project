@@ -195,8 +195,8 @@ class NewPost(BlogHandler):
 
 class EditPost(BlogHandler):
     def get(self, post_id):
-        if not self.user:
-            self.redirect('/blog')
+        if self.user:
+
             post = get_post_by_id(post_id)
             if self.user.key().id() == post.author_id:
                 subject = post.subject
@@ -205,6 +205,8 @@ class EditPost(BlogHandler):
             else:
                 error = "You can only edit your posts"
                 self.render("permalink.html", post = post, error = error)
+        else:
+            self.redirect('/login')
 
     def post(self, post_id):
         post = get_post_by_id(post_id)
@@ -229,14 +231,16 @@ class EditPost(BlogHandler):
 
 class DeletePost(BlogHandler):
     def get(self, post_id):
-        if not self.user:
-            self.redirect('/blog')
-        post = get_post_by_id(post_id)
-        if self.user.key().id() == post.author_id:
-            self.render("delete_post.html", post = post)
+        if self.user:
+
+            post = get_post_by_id(post_id)
+            if self.user.key().id() == post.author_id:
+                self.render("delete_post.html", post = post)
+            else:
+                error = "You can only delete your posts"
+                self.render("permalink.html", post = post, error = error)
         else:
-            error = "You can only delete your posts"
-            self.render("permalink.html", post = post, error = error)
+            self.redirect('/login')
 
     def post(self, post_id):
         post = get_post_by_id(post_id)
