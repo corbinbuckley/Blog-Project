@@ -195,14 +195,16 @@ class NewPost(BlogHandler):
 
 class EditPost(BlogHandler):
     def get(self, post_id):
-        post = get_post_by_id(post_id)
-        if self.user.key().id() == post.author_id:
-            subject = post.subject
-            content = post.content
-            self.render("Edit_post.html", subject = subject, content = content)
-        else:
-            error = "You can only edit your posts"
-            self.render("permalink.html", post = post, error = error)
+        if not self.user:
+            self.redirect('/blog')
+            post = get_post_by_id(post_id)
+            if self.user.key().id() == post.author_id:
+                subject = post.subject
+                content = post.content
+                self.render("Edit_post.html", subject = subject, content = content)
+            else:
+                error = "You can only edit your posts"
+                self.render("permalink.html", post = post, error = error)
 
     def post(self, post_id):
         post = get_post_by_id(post_id)
@@ -225,6 +227,28 @@ class EditPost(BlogHandler):
             errror = "You can only edit your posts"
             self.render("permalink.html", post = post, error = error)
 
+class DeletePost(BlogHandler):
+    def get(self, post_id):
+        if not self.user:
+            self.redirect('/blog')
+        post = get_post_by_id(post_id)
+        if self.user.key().id() == post.author_id:
+            self.render("delete_post.html", post = post)
+        else:
+            error = "You can only delete your posts"
+            self.render("permalink.html", post = post, error = error)
+
+    def post(self, post_id):
+        post = get_post_by_id(post_id)
+
+        if not self.user:
+            self.redirect('/blog')
+        if post is not None:
+            if self.user.key().id() == post.author_id:
+                self.redirect('/blog')
+            else:
+                error = "You can only delete your posts"
+                self.render("permalink.html", post = post, error = error)
 
 
 USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
@@ -340,6 +364,7 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/login', Login),
                                ('/logout', Logout),
                                ('/unit3/welcome', Unit3Welcome),
-                               ('/blog/edit_post/([0-9]+)', EditPost)
+                               ('/blog/edit_post/([0-9]+)', EditPost),
+                               ('/blog/delete_post/([0-9]+)', DeletePost)
                                ],
                               debug=True)
