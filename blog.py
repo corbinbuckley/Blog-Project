@@ -16,6 +16,12 @@ jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
 
 secret = 'secretword'
 
+# get comment from database using the comments id
+def get_comment_by_id(post_id):
+    key = db.Key.from_path('Comment', int(comment_id), parent=comment_key())
+    return db.get(key)
+
+
 def get_post_by_id(post_id):
     key = db.Key.from_path('Post', int(post_id), parent=blog_key())
     return db.get(key)
@@ -143,7 +149,13 @@ class Post(db.Model):
 
 # Not using this class at the moment. Dont know if I will.
 class Comment(db.Model):
-    comment = db.TextProperty()
+    parent_post_id = db.IntegerProperty()
+    comment_id = db.IntegerProperty()
+    commenter_id = db.IntegerProperty()
+    commenter_name = db.StringProperty()
+    comment = db.TextProperty(required = True)
+    created = db.DateTimeProperty(auto_now_add = True)
+    last_modified = db.DateTimeProperty(auto_now = True)
 
     def render(self):
         self._render_text = self.comment.replace('\n','<br>')
@@ -160,7 +172,8 @@ class PostPage(BlogHandler):
         key = db.Key.from_path('Post', int(post_id), parent=blog_key())
         post = db.get(key)
 
-        comments = Comment.all()
+        comments = Comment.all().filter('parent_post_id =', int(post_id))
+        # comments = c.filter('parent_post_id =', post_id)
 
         if not post:
             self.error(404)
@@ -271,10 +284,21 @@ class NewComment(BlogHandler):
     def post(self, post_id):
         if self.user:
             post = get_post_by_id(post_id)
+
             comment = self.request.get('comment')
+            parent_post_id = int(post_id)
+            commenter_id = self.user.key().id()
+            commenter_name = self.user.name
 
             if comment:
-                c = Comment(parent=comment_key(), comment = comment)
+                c = Comment(parent=comment_key(),
+                            comment = comment,
+                            parent_post_id = parent_post_id,
+                            commenter_id = commenter_id,
+                            commenter_name = commenter_name,
+                            comment_id = 1)
+                c.put()
+                c.comment_id = c.key().id()
                 c.put()
                 self.redirect('/blog/%s' % str(post.key().id()))
             else:
