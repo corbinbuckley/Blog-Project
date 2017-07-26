@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{%  block content %}
+<style type="text/css">
+    textarea {
+        width: 100%;
+        height: 80px;
+    }
+</style>
+    {{post.render() | safe}}
+    <br>
+    <div class="container">
+        <h3>Write Comment</h3>
+        <form method="post">
+            <textarea rows="3" cols="50" name="comment">{{comment}}</textarea>
+            <div class="error">{{error_comment}}</div>
+            <button type="submit">Submit</button>
+            <a href={{ "/blog/" ~ post.key().id() }}>Cancel</a>
+        </form>
+    </div>
+{% endblock %}

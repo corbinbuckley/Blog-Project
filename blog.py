@@ -124,6 +124,9 @@ class User(db.Model):
 def blog_key(name = 'default'):
     return db.Key.from_path('blogs', name)
 
+def comment_key(name = 'default'):
+    return db.Key.from_path('comments',name)
+
 class Post(db.Model):
     subject = db.StringProperty(required = True)
     content = db.TextProperty(required = True)
@@ -144,7 +147,7 @@ class Comment(db.Model):
 
     def render(self):
         self._render_text = self.comment.replace('\n','<br>')
-        return render_str('front.html', c = self)
+        return render_str('comment.html', c = self)
 
 class BlogFront(BlogHandler):
     def get(self):
@@ -254,6 +257,32 @@ class DeletePost(BlogHandler):
             else:
                 error_delete = "You can only delete your posts"
                 self.render("permalink.html", post = post, error_delete = error_delete)
+
+# Class to make comments
+class NewComment(BlogHandler):
+    def get(self, post_id):
+        if self.user:
+            post = get_post_by_id(post_id)
+            self.render("new_comment.html", post = post)
+
+        else:
+            self.redirect('/login')
+
+    def post(slef, post_id):
+        if self.user:
+            post = get_post_by_id(post_id)
+            comment = self.request.get('comment')
+
+            if comment:
+                c = Comment(parent=comment_key(), comment = comment)
+                c.put()
+                self.redirect('/blog/%s' % str(post.key().id()))
+            else:
+                error_comment = "You need to write something in order to comment"
+                self.render("new_comment.html", error_comment = error_comment, post = post)
+        else:
+            self.redirect('/login')
+
 
 
 USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
@@ -370,6 +399,7 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/logout', Logout),
                                ('/unit3/welcome', Unit3Welcome),
                                ('/blog/edit_post/([0-9]+)', EditPost),
-                               ('/blog/delete_post/([0-9]+)', DeletePost)
+                               ('/blog/delete_post/([0-9]+)', DeletePost),
+                               ('/blog/new_comment/([0-9]+)', NewComment)
                                ],
                               debug=True)
