@@ -203,8 +203,8 @@ class EditPost(BlogHandler):
                 content = post.content
                 self.render("Edit_post.html", subject = subject, content = content)
             else:
-                error = "You can only edit your posts"
-                self.render("permalink.html", post = post, error = error)
+                error_edit = "You can only edit your posts"
+                self.render("permalink.html", post = post, error_edit = error_edit)
         else:
             self.redirect('/login')
 
@@ -237,8 +237,8 @@ class DeletePost(BlogHandler):
             if self.user.key().id() == post.author_id:
                 self.render("delete_post.html", post = post)
             else:
-                error = "You can only delete your posts"
-                self.render("permalink.html", post = post, error = error)
+                error_delete = "You can only delete your posts"
+                self.render("permalink.html", post = post, error_delete = error_delete)
         else:
             self.redirect('/login')
 
@@ -249,10 +249,11 @@ class DeletePost(BlogHandler):
             self.redirect('/blog')
         if post is not None:
             if self.user.key().id() == post.author_id:
+                post.delete()
                 self.redirect('/blog')
             else:
-                error = "You can only delete your posts"
-                self.render("permalink.html", post = post, error = error)
+                error_delete = "You can only delete your posts"
+                self.render("permalink.html", post = post, error_delete = error_delete)
 
 
 USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
