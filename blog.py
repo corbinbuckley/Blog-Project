@@ -137,9 +137,8 @@ class Post(db.Model):
 
 
     def render(self):
-        comments = Comment.all()
         self._render_text = self.content.replace('\n', '<br>')
-        return render_str("post.html", Post = self, comments = comments)
+        return render_str("post.html", Post = self)
         # Changed to Post = self instead of p = self
 
 # Not using this class at the moment. Dont know if I will.

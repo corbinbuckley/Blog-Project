@@ -16,8 +16,6 @@
   <div class="post-content">
     {{Post._render_text | safe}}
   </div>
-    {% for c in comments %}
-      {{c.render() | safe}}
-    {% endfor %}
+
 
 </div>
