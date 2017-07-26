@@ -137,8 +137,9 @@ class Post(db.Model):
 
 
     def render(self):
+        comments = Comment.all()
         self._render_text = self.content.replace('\n', '<br>')
-        return render_str("post.html", Post = self)
+        return render_str("post.html", Post = self, comments = comments)
         # Changed to Post = self instead of p = self
 
 # Not using this class at the moment. Dont know if I will.
@@ -268,7 +269,7 @@ class NewComment(BlogHandler):
         else:
             self.redirect('/login')
 
-    def post(slef, post_id):
+    def post(self, post_id):
         if self.user:
             post = get_post_by_id(post_id)
             comment = self.request.get('comment')
