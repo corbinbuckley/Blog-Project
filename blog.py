@@ -175,6 +175,7 @@ class PostPage(BlogHandler):
         comments = Comment.all().filter('parent_post_id =', int(post_id))
         # comments = c.filter('parent_post_id =', post_id)
 
+
         if not post:
             self.error(404)
             return
