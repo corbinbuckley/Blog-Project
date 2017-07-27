@@ -8,6 +8,10 @@
     }
 </style>
     {{post.render() | safe}}
+    {% for c in comments %}
+      {{c.render() | safe}}
+      <hr>
+    {% endfor %}
     <br>
     <div class="container">
         <h3>Write Comment</h3>

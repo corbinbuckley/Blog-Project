@@ -1,4 +1,9 @@
 
-  <div class="post-content">
-    {{c._render_text | safe}}
-  </div>
+    <div>
+        <h4>{{c.commenter_name.title()}}
+            <small>{{c.created.strftime("%b %d, %Y")}}</small>
+        </h4>
+    <div>
+        {{c._render_text | safe}}
+    </div>
+    </div>
