@@ -1,16 +1,18 @@
 <div class="post">
   <div class="post-heading">
-    <div class="post-title">
+    <div class="row">
+    <div class="post-title col-xs-9 col-sm-9 col-md-9 col-lg-9">
 <!--     Grabs the subject from class Post in blog.py for every p(post) in Post  -->
       <a href={{ "/blog/" ~ Post.key().id() }}>
       {{Post.subject}}
       </a>
     </div>
 
-    <div class="post-date">
+    <div class="post-date col-xs-3 col-sm-3 col-md-3 col-lg-3">
 <!--  python fucntion prints readable date  -->
       {{Post.created.strftime("%b %d, %Y")}}
     </div>
+  </div>
   </div>
 
   <div class="post-content">
