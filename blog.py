@@ -327,6 +327,7 @@ class EditComment(BlogHandler):
     def post(self, comment_id):
         if self.user:
             comment = get_comment_by_id(comment_id)
+            post = get_post_by_id(comment.parent_post_id)
             if comment is not None:
                 if self.user.key().id() == comment.commenter_id:
                     new_comment = self.request.get('comment')
