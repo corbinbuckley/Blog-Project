@@ -21,5 +21,7 @@
             <button type="submit">Submit</button>
             <a href={{ "/blog/" ~ post.key().id() }}>Cancel</a>
         </form>
+        <a href="/blog/delete_comment/{{comment_id}}">
+            <button class="delete">Delete</button>
     </div>
 {% endblock %}
