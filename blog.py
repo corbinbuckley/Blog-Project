@@ -317,7 +317,7 @@ class EditComment(BlogHandler):
             if comment is not None and post is not None:
                 if self.user.key().id() == comment.commenter_id:
                     comment = comment.comment
-                    self.render("edit_comment.html", post = post, comment = comment)
+                    self.render("edit_comment.html", post = post, comment = comment, comment_id = comment_id)
                 else:
                     error_comment = "You can only edit your own comments"
                     self.render('permalink.html', post = post, comment = comment, error_comment = error_comment)
@@ -342,6 +342,34 @@ class EditComment(BlogHandler):
 
         else:
             self.redirct('/login')
+
+class DeleteComment(BlogHandler):
+    def get(self, comment_id):
+        if self.user:
+            comment = get_comment_by_id(comment_id)
+            post = get_post_by_id(comment.parent_post_id)
+            if self.user.key().id() == comment.commenter_id:
+                self.render("delete_post.html", post = post)
+            else:
+                error_delete = "You can only delete your comments"
+                self.render("permalink.html", post = post, error_delete = error_delete)
+        else:
+            self.redirect('/login')
+
+    def post(self, comment_id):
+        if self.user:
+            comment = get_comment_by_id(comment_id)
+            post = get_post_by_id(comment.parent_post_id)
+            if self.user.key().id() == comment.commenter_id:
+                comment.delete()
+                self.redirect('/blog/%s' % comment.parent_post_id)
+            else:
+                error_delete = "You can only delete your comments"
+                self.render("permalink.html", post = post, error_delete = error_delete)
+
+        else:
+            self.redirect('/login')
+
 
 
 
@@ -461,6 +489,7 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/blog/edit_post/([0-9]+)', EditPost),
                                ('/blog/delete_post/([0-9]+)', DeletePost),
                                ('/blog/new_comment/([0-9]+)', NewComment),
-                               ('/blog/edit_comment/([0-9]+)', EditComment)
+                               ('/blog/edit_comment/([0-9]+)', EditComment),
+                               ('/blog/delete_comment/([0-9]+)', DeleteComment)
                                ],
                               debug=True)
