@@ -308,6 +308,38 @@ class NewComment(BlogHandler):
         else:
             self.redirect('/login')
 
+class EditComment(BlogHandler):
+    """This class will take the oringal comment stuff and display it then take the changes and add it as new commment"""
+    def get(self, comment_id):
+        if self.user:
+            comment = get_comment_by_id(comment_id)
+            post = get_post_by_id(comment.parent_post_id)
+            if self.user.key().id() == comment.commenter_id:
+                comment = comment.comment
+                self.render("edit_comment.html", post = post, comment = comment)
+            else:
+                error_comment = "You can only edit your own comments"
+                self.render('permalink.html', post = post, comment = comment, error_comment = error_comment)
+        else:
+            self.redirect('/login')
+
+    def post(self, comment_id):
+        if self.user:
+            comment = get_comment_by_id(comment_id)
+            if self.user.key().id() == comment.commenter_id:
+                new_comment = self.request.get('comment')
+
+                if new_comment:
+                    comment.comment = new_comment
+                    comment.put()
+                    self.redirect('/blog/%s' % comment.parent_post_id)
+                else:
+                    error_comment = "You need to write something in order to comment"
+                    self.render("edit_comment.html", post = post, comment = new_comment, error_comment = error_comment)
+
+        else:
+            self.redirct('/login')
+
 
 
 USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
@@ -425,6 +457,7 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/unit3/welcome', Unit3Welcome),
                                ('/blog/edit_post/([0-9]+)', EditPost),
                                ('/blog/delete_post/([0-9]+)', DeletePost),
-                               ('/blog/new_comment/([0-9]+)', NewComment)
+                               ('/blog/new_comment/([0-9]+)', NewComment),
+                               ('blog/edit_comment/([0-9]+)', EditComment)
                                ],
                               debug=True)
