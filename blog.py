@@ -17,7 +17,7 @@ jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
 secret = 'secretword'
 
 # get comment from database using the comments id
-def get_comment_by_id(post_id):
+def get_comment_by_id(comment_id):
     key = db.Key.from_path('Comment', int(comment_id), parent=comment_key())
     return db.get(key)
 
@@ -314,28 +314,30 @@ class EditComment(BlogHandler):
         if self.user:
             comment = get_comment_by_id(comment_id)
             post = get_post_by_id(comment.parent_post_id)
-            if self.user.key().id() == comment.commenter_id:
-                comment = comment.comment
-                self.render("edit_comment.html", post = post, comment = comment)
-            else:
-                error_comment = "You can only edit your own comments"
-                self.render('permalink.html', post = post, comment = comment, error_comment = error_comment)
+            if comment is not None and post is not None:
+                if self.user.key().id() == comment.commenter_id:
+                    comment = comment.comment
+                    self.render("edit_comment.html", post = post, comment = comment)
+                else:
+                    error_comment = "You can only edit your own comments"
+                    self.render('permalink.html', post = post, comment = comment, error_comment = error_comment)
         else:
             self.redirect('/login')
 
     def post(self, comment_id):
         if self.user:
             comment = get_comment_by_id(comment_id)
-            if self.user.key().id() == comment.commenter_id:
-                new_comment = self.request.get('comment')
+            if comment is not None:
+                if self.user.key().id() == comment.commenter_id:
+                    new_comment = self.request.get('comment')
 
-                if new_comment:
-                    comment.comment = new_comment
-                    comment.put()
-                    self.redirect('/blog/%s' % comment.parent_post_id)
-                else:
-                    error_comment = "You need to write something in order to comment"
-                    self.render("edit_comment.html", post = post, comment = new_comment, error_comment = error_comment)
+                    if new_comment:
+                        comment.comment = new_comment
+                        comment.put()
+                        self.redirect('/blog/%s' % comment.parent_post_id)
+                    else:
+                        error_comment = "You need to write something in order to comment"
+                        self.render("edit_comment.html", post = post, comment = new_comment, error_comment = error_comment)
 
         else:
             self.redirct('/login')
@@ -458,6 +460,6 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/blog/edit_post/([0-9]+)', EditPost),
                                ('/blog/delete_post/([0-9]+)', DeletePost),
                                ('/blog/new_comment/([0-9]+)', NewComment),
-                               ('blog/edit_comment/([0-9]+)', EditComment)
+                               ('/blog/edit_comment/([0-9]+)', EditComment)
                                ],
                               debug=True)
