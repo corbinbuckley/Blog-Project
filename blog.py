@@ -149,7 +149,7 @@ class Post(db.Model):
 
 # Not using this class at the moment. Dont know if I will.
 class Comment(db.Model):
-    parent_post_id = db.IntegerProperty()
+    parent_post_id = db.IntegerProperty(required = True)
     comment_id = db.IntegerProperty()
     commenter_id = db.IntegerProperty()
     commenter_name = db.StringProperty()
@@ -172,7 +172,7 @@ class PostPage(BlogHandler):
         key = db.Key.from_path('Post', int(post_id), parent=blog_key())
         post = db.get(key)
 
-        comments = Comment.all().filter('parent_post_id =', int(post_id)).order('-created')
+        comments = Comment.all().filter('parent_post_id =', int(post_id))
         # comments = c.filter('parent_post_id =', post_id)
 
 
