@@ -215,13 +215,17 @@ class EditPost(BlogHandler):
         if self.user:
 
             post = get_post_by_id(post_id)
+            #To put the comments in when the error displays
+            comments = Comment.all().filter('parent_post_id =', int(post_id))
             if self.user.key().id() == post.author_id:
                 subject = post.subject
                 content = post.content
                 self.render("Edit_post.html", subject = subject, content = content)
             else:
                 error_edit = "You can only edit your posts"
-                self.render("permalink.html", post = post, error_edit = error_edit)
+                # This doesnt show the comments, see notes on August 4th
+                self.render("permalink.html", post = post, error_edit = error_edit, comments = comments)
+
         else:
             self.redirect('/login')
 
