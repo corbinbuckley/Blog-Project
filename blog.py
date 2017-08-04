@@ -255,11 +255,13 @@ class DeletePost(BlogHandler):
         if self.user:
 
             post = get_post_by_id(post_id)
+            #To put the comments in when the error displays
+            comments = Comment.all().filter('parent_post_id =', int(post_id))
             if self.user.key().id() == post.author_id:
                 self.render("delete_post.html", post = post)
             else:
                 error_delete = "You can only delete your posts"
-                self.render("permalink.html", post = post, error_delete = error_delete)
+                self.render("permalink.html", post = post, error_delete = error_delete, comments = comments)
         else:
             self.redirect('/login')
 
