@@ -172,7 +172,7 @@ class PostPage(BlogHandler):
         key = db.Key.from_path('Post', int(post_id), parent=blog_key())
         post = db.get(key)
 
-        comments = Comment.all().filter('parent_post_id =', int(post_id))
+        comments = Comment.all().filter('parent_post_id =', int(post_id)).order('-created')
         # comments = c.filter('parent_post_id =', post_id)
 
 
